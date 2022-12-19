@@ -1,0 +1,145 @@
+.mars-plateau {
+  /* 
+  Para alterar o estilo do plateau,
+  acesse components/Mars/Mars.tsx
+ */
+}
+
+/* Célula */
+.cell {
+  position: relative;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(200, 15%, 19%);
+  min-height: 70px;
+  border-radius: 8px;
+  transition: all 0.3s ease-out;
+}
+
+/* Número da célula */
+.cell label {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  color: #fff;
+  opacity: 0.2;
+  font-size: 0.8rem;
+  transition: all 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+  .cell label {
+    top: 4px;
+    left: 6px;
+    opacity: 0.2;
+    font-size: 10px;
+  }
+}
+
+/* Célula percorrida */
+.cell.path:before {
+  position: absolute;
+  display: block;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: #37474f;
+  animation: path 0.5s infinite;
+  transition: all 0.3s ease-out;
+  z-index: 0;
+  border-radius: 8px;
+}
+
+.cell.path label {
+  color: #fff;
+}
+
+.cell.end:before {
+  display: none;
+}
+
+.cell.end {
+  background-color: rgb(52, 199, 89);
+  transform: scale(1.1);
+  z-index: 1;
+  transition: all 0.3s ease-out;
+  box-shadow: 0 24px 40px rgb(0 0 0 / 20%);
+  -webkit-box-shadow: 0 24px 40px rgb(0 0 0 / 20%);
+  -moz-box-shadow: 0 24px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cell.start {
+  background-color: #37474fcf;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-3px, 0);
+  }
+  20% {
+    transform: translate(3px, 0);
+  }
+  30% {
+    transform: translate(-3px, 0);
+  }
+  40% {
+    transform: translate(3px, 0);
+  }
+  50% {
+    transform: translate(-3px, 0);
+  }
+  60% {
+    transform: translate(3px, 0);
+  }
+  70% {
+    transform: translate(-3px, 0);
+  }
+  80% {
+    transform: translate(3px, 0);
+  }
+  90% {
+    transform: translate(-1px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.cell.error {
+  background-color: rgb(255, 69, 58);
+  animation: shake 0.8s;
+}
+
+.cell.end label,
+.cell.error label {
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.rover {
+  z-index: 1;
+}
+
+.rover.ghost {
+  opacity: 0.2;
+}
+
+.rover.N {
+  transform: rotate(0deg);
+}
+
+.rover.E {
+  transform: rotate(90deg);
+}
+
+.rover.S {
+  transform: rotate(180deg);
+}
+
+.rover.W {
+  transform: rotate(270deg);
+}
