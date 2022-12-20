@@ -1,8 +1,9 @@
 .mars-plateau {
-  /* 
-  Para alterar o estilo do plateau,
-  acesse components/Mars/Mars.tsx
- */
+  display: grid;
+  /* o tamanho da grid é controlado pelo plateou */
+  gap: 0.156rem;
+  margin: 0;
+  padding: 0;
 }
 
 /* Célula */
@@ -71,8 +72,10 @@
 
 .cell.start {
   background-color: #37474fcf;
+  transition: all 0.3s ease-out;
 }
 
+/* Animação para quando ocorrer erro */
 @keyframes shake {
   0% {
     transform: translate(0, 0);
@@ -112,6 +115,7 @@
 .cell.error {
   background-color: rgb(255, 69, 58);
   animation: shake 0.8s;
+  transition: all 0.3s ease-out;
 }
 
 .cell.end label,
@@ -122,24 +126,30 @@
 
 .rover {
   z-index: 1;
+  transition: all 0.3s ease-out;
 }
 
 .rover.ghost {
   opacity: 0.2;
+  transition: all 0.3s ease-out;
 }
 
 .rover.N {
   transform: rotate(0deg);
+  transition: all 0.3s ease-out;
 }
 
 .rover.E {
   transform: rotate(90deg);
+  transition: all 0.3s ease-out;
 }
 
 .rover.S {
   transform: rotate(180deg);
+  transition: all 0.3s ease-out;
 }
 
 .rover.W {
   transform: rotate(270deg);
+  transition: all 0.3s ease-out;
 }

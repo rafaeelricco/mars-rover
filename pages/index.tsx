@@ -1,44 +1,33 @@
-import Image from 'next/image'
-import { useContext } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
 
-import { Autocomplete, Button, JsonInput, Slider, Text, Title } from '@mantine/core'
+import axios from 'axios'
+import Image from 'next/image'
+import { useContext, useEffect } from 'react'
+
+import {
+  Autocomplete,
+  Button,
+  JsonInput,
+  Slider,
+  Text,
+  Title
+} from '@mantine/core'
 
 import Mars from '../components/Mars/Mars'
 import { APIContext } from './contexts/roverContext'
 
-import { Container, ContainerCommands, ContainerExecution } from '../styles/styles'
+import {
+  Container,
+  ContainerCommands,
+  ContainerExecution
+} from '../styles/styles'
 import Mars2 from '../components/Mars/Mars2'
 import { Plateou } from '../components/Plateou/Plateou'
 import { Context, State } from '../typings.d'
 
 export default function HomePage() {
-  const { state, state2, setState, setState2, grid, setGrid } = useContext<Context>(APIContext as React.Context<Context>)
-
-  // cria um objeto com os comandos
-  const state_json = JSON.stringify(
-    [
-      {
-        backlog: [
-          {
-            'rover-1': [
-              {
-                ...state
-              }
-            ]
-          },
-          {
-            'rover-2': [
-              {
-                ...state2
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    null,
-    2
-  )
+  const { state, state2, setState, setState2, grid, setGrid } =
+    useContext<Context>(APIContext as React.Context<Context>)
 
   // recebe o comando do rover 1
   const interact_rover = (command: string) => {
@@ -53,7 +42,9 @@ export default function HomePage() {
   // função que processa o comando
   const process_command = (state: State, command: string) => {
     if (!/^[LRM]+$/.test(command)) {
-      alert('O comando inserido é inválido. Tenha certeza que você digitou L, R ou M.')
+      alert(
+        'O comando inserido é inválido. Tenha certeza que você digitou L, R ou M.'
+      )
       return
     } else {
       execute_command(state, command.split(''))
@@ -61,16 +52,16 @@ export default function HomePage() {
   }
 
   // função que executa o comando
-  const execute_command = (state: State, command: string[]) => {
-    const Set = state === state2 ? setState2 : setState
+  const execute_command = (state: State, command: string[]): void => {
+    const setStateFn = state === state2 ? setState2 : setState
 
     const cmd = [...command]
+
     cmd.forEach((command, index) => {
       setTimeout(() => {
-        Set({
+        setStateFn({
           ...state,
-          commands: [...state.commands, command],
-          execute: true
+          commands: [...state.commands, command]
         })
       }, 1000 * index)
     })
@@ -106,18 +97,53 @@ export default function HomePage() {
     })
   }
 
+  // cria um objeto com os comandos
+  const state_json = JSON.stringify(
+    [
+      {
+        backlog: {
+          rovers: [
+            {
+              'rover-01': {
+                ...state
+              },
+              'rovers-02': {
+                ...state2
+              }
+            }
+          ]
+        }
+      }
+    ],
+    null,
+    2
+  )
+
   return (
     <>
       <Container>
         <Title weight={700} align="center">
           Mars Rover
         </Title>
-        <Text align="center" mt={8} mb={16} color={'gray'}>
-          Já imaginou como seria controlar um <a href="https://pt.wikipedia.org/wiki/Astrom%C3%B3vel_marciano">rover</a> em um platô de Marte?
+        <Text align="center" mb={16} color={'gray'}>
+          Já imaginou como seria controlar um{' '}
+          <a href="https://pt.wikipedia.org/wiki/Astrom%C3%B3vel_marciano">
+            rover
+          </a>{' '}
+          em um platô de Marte?
         </Text>
 
-        <JsonInput placeholder="Textarea will autosize to fit the content" value={state_json} variant="filled" radius="md" size="md" minRows={4} />
+        {/* Input para visualizar o backlog */}
+        <JsonInput
+          placeholder="Textarea will autosize to fit the content"
+          value={state_json}
+          variant="filled"
+          radius={12}
+          size="md"
+          minRows={4}
+        />
 
+        {/* Slider para escolher o tamanho do grid */}
         <Slider
           m={16}
           mb={32}
@@ -137,36 +163,47 @@ export default function HomePage() {
           ]}
         />
 
+        {/* Mars Rover */}
         <Mars command={state.commands} />
         <Mars2 command2={state2.commands} />
         <Plateou />
 
-        {/* Primeiro Rover */}
+        {/* Controles do primeiro Rover */}
         <ContainerExecution>
           <Autocomplete
             mt={16}
             type="text"
-            placeholder={'Digite um comando e pressione enter. Ex: RMLM'}
-            radius={'md'}
-            icon={<Image src="/svg/commands.svg" alt="commands icon" width={16} height={16} />}
+            radius={12}
+            placeholder={state.commands as string}
+            readOnly
+            icon={
+              <Image
+                src="/svg/commands.svg"
+                alt="commands icon"
+                width={16}
+                height={16}
+              />
+            }
             data={['RRRR', 'MMM', 'RMLM']}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                interact_rover(e.currentTarget.value)
-              }
+            onItemSubmit={(e) => {
+              interact_rover(e.value)
             }}
           />
-          <Button mt={16} color={'green'} radius={'md'} onClick={clear_state} variant="outline">
-            Clear
-          </Button>
         </ContainerExecution>
         <ContainerCommands>
           <Button
-            radius={'md'}
+            radius={12}
             onClick={(e) => {
               interact_rover('L')
             }}
-            leftIcon={<Image src="/svg/left.svg" alt="Left icon" width={16} height={16} />}
+            leftIcon={
+              <Image
+                src="/svg/left.svg"
+                alt="Left icon"
+                width={16}
+                height={16}
+              />
+            }
           >
             Left
           </Button>
@@ -175,8 +212,15 @@ export default function HomePage() {
             onClick={(e) => {
               interact_rover('M')
             }}
-            radius={'md'}
-            leftIcon={<Image src="/svg/move.svg" alt="Left icon" width={15} height={15} />}
+            radius={12}
+            leftIcon={
+              <Image
+                src="/svg/move.svg"
+                alt="Left icon"
+                width={15}
+                height={15}
+              />
+            }
           >
             Move
           </Button>
@@ -185,41 +229,58 @@ export default function HomePage() {
             onClick={(e) => {
               interact_rover('R')
             }}
-            radius={'md'}
-            leftIcon={<Image src="/svg/right.svg" alt="Right icon" width={16} height={16} />}
+            radius={12}
+            leftIcon={
+              <Image
+                src="/svg/right.svg"
+                alt="Right icon"
+                width={16}
+                height={16}
+              />
+            }
           >
             Right
           </Button>
         </ContainerCommands>
 
-        {/* Segundo Rover */}
+        {/* Controles do segundo Rover */}
         <ContainerExecution>
           <Autocomplete
             mt={16}
             type="text"
-            placeholder={'Digite um comando e pressione enter. Ex: RMLM'}
+            placeholder={state2.commands as string}
             disabled={state.endPosition == ''}
-            radius={'md'}
-            icon={<Image src="/svg/commands.svg" alt="commands icon" width={16} height={16} />}
+            radius={12}
+            readOnly
+            icon={
+              <Image
+                src="/svg/commands.svg"
+                alt="commands icon"
+                width={16}
+                height={16}
+              />
+            }
             data={['RRRR', 'MMM', 'RMLM']}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                interact_rover2(e.currentTarget.value)
-              }
+            onItemSubmit={(e) => {
+              interact_rover2(e.value)
             }}
           />
-          <Button disabled={state.endPosition == ''} mt={16} color={'green'} radius={'md'} onClick={clear_state} variant="outline">
-            Clear
-          </Button>
         </ContainerExecution>
         <ContainerCommands>
           <Button
-            radius={'md'}
+            radius={12}
             disabled={state.endPosition == ''}
             onClick={(e) => {
               interact_rover2('L')
             }}
-            leftIcon={<Image src="/svg/left.svg" alt="Left icon" width={16} height={16} />}
+            leftIcon={
+              <Image
+                src="/svg/left.svg"
+                alt="Left icon"
+                width={16}
+                height={16}
+              />
+            }
           >
             Left
           </Button>
@@ -229,8 +290,15 @@ export default function HomePage() {
               interact_rover2('M')
             }}
             disabled={state.endPosition == ''}
-            radius={'md'}
-            leftIcon={<Image src="/svg/move.svg" alt="Left icon" width={15} height={15} />}
+            radius={12}
+            leftIcon={
+              <Image
+                src="/svg/move.svg"
+                alt="Left icon"
+                width={15}
+                height={15}
+              />
+            }
           >
             Move
           </Button>
@@ -240,12 +308,37 @@ export default function HomePage() {
               interact_rover2('R')
             }}
             disabled={state.endPosition == ''}
-            radius={'md'}
-            leftIcon={<Image src="/svg/right.svg" alt="Right icon" width={16} height={16} />}
+            radius={12}
+            leftIcon={
+              <Image
+                src="/svg/right.svg"
+                alt="Right icon"
+                width={16}
+                height={16}
+              />
+            }
           >
             Right
           </Button>
         </ContainerCommands>
+        <Button
+          mt={8}
+          color={'red'}
+          radius={12}
+          onClick={clear_state}
+          variant="outline"
+          fullWidth
+          leftIcon={
+            <Image
+              src="/svg/clean.svg"
+              alt="Clear icon"
+              width={16}
+              height={16}
+            />
+          }
+        >
+          Clear
+        </Button>
       </Container>
     </>
   )

@@ -6,10 +6,16 @@ export const Container = styled.div`
   padding-left: 16px;
   padding-right: 16px;
   max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2rem auto;
+  height: 100%;
   width: 100%;
-  height: 100vh;
+
+  @media (max-width: 576px) {
+    align-content: baseline;
+    height: 100%;
+    width: 100%;
+    margin: 1.618rem 0 2.618rem 0;
+  }
 `
 
 export const ContainerExecution = styled.div`

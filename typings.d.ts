@@ -28,7 +28,7 @@ export const Right = {
 
 // tipagem do estado
 interface State {
-  commands: string[]
+  commands: string | string[]
   execute: boolean
   facing: string
   ghost: boolean

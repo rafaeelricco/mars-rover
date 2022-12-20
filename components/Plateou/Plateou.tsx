@@ -25,14 +25,10 @@ export const Plateou = () => {
     <ul
       className="mars-plateau"
       style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${size}, 1fr)`,
-        gridGap: '0.154rem',
-        margin: 0,
-        padding: 0
+        gridTemplateColumns: `repeat(${size}, 1fr)`
       }}
     >
-      {cells.map((cell) => {
+      {cells.map((cell, index) => {
         let roverElm = null
         let roverPath = null
 
@@ -47,7 +43,6 @@ export const Plateou = () => {
         // .cell.path:before -- caminho da rota
 
         /* Rover 1 */
-
         // quando o rover chegou no final da rota
         if (cell === state.endPosition) {
           cellStatus = 'end'
@@ -103,13 +98,12 @@ export const Plateou = () => {
         }
 
         return (
-          <>
-            <li className={`cell ${cellStatus}`} key={cell + Math.random()}>
-              <label key={cell + Math.random()}>{`X${cell.split('-')[0]} Y${cell.split('-')[1]}`}</label>
-              {roverElm || roverPath}
-              {rover2Elm || rover2Path}
-            </li>
-          </>
+          <li key={index} className={`cell ${cellStatus}`}>
+            <label className="cell-label">
+              {`X${cell.split('-')[1]} Y${cell.split('-')[0]}`}
+            </label>
+            {roverElm || roverPath || rover2Elm || rover2Path}
+          </li>
         )
       })}
     </ul>

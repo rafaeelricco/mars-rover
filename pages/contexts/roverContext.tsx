@@ -39,7 +39,9 @@ function APIContextProvider({ children }) {
     size: 4
   })
 
-  return <APIContext.Provider value={{ state, setState, state2, setState2, grid, setGrid }}>{children}</APIContext.Provider>
+  return (
+    <APIContext.Provider value={{ state, setState, state2, setState2, grid, setGrid }}>{children}</APIContext.Provider>
+  )
 }
 
 export default APIContextProvider

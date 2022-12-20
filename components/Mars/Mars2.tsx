@@ -5,8 +5,10 @@ import { APIContext } from '../../pages/contexts/roverContext'
 import { Plateou } from '../Plateou/Plateou'
 import { State, Context, Left, Move, Right, Direction } from '../../typings.d'
 
-const Mars = ({ command2 }: { command2: string[] }) => {
-  const { state, state2, setState2, grid } = useContext<Context>(APIContext as React.Context<Context>)
+const Mars = ({ command2 }: { command2: string[] | string }) => {
+  const { state, state2, setState2, grid } = useContext<Context>(
+    APIContext as React.Context<Context>
+  )
   const { size } = grid
 
   const currentCommand = state2.commands[state2.commands.length - 1]
