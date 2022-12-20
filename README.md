@@ -4,7 +4,7 @@
 
 # Mars Rover | Next.js
 
-Já imaginou como seria controlar o rover da NASA? Nesse projeto, você vai poderá controla-lo e ver como ele se comporta em diferentes cenários.
+Imagina como seria ter o controle do rover da NASA? Neste projeto, você terá a oportunidade de controlá-lo e observar como ele se desempenha em diferentes cenários.
 
 ## Sobre o projeto
 

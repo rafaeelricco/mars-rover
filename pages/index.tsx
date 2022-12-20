@@ -69,55 +69,55 @@ export default function HomePage() {
 
   // função que limpa todo o estado
   const clear_state = () => {
+    const cleared_state = {
+      commands: [],
+      execute: false,
+      facing: 'N',
+      ghost: false,
+      position: '0-0',
+      startPosition: '00N',
+      endPosition: '',
+      path: { '0-0': 'N' },
+      error: null,
+      start: null,
+      end: null
+    }
     setState({
-      commands: [],
-      execute: false,
-      facing: 'N',
-      ghost: false,
-      position: '0-0',
-      startPosition: '00N',
-      endPosition: '',
-      path: { '0-0': 'N' },
-      error: null,
-      start: null,
-      end: null
-    })
-    setState2({
-      commands: [],
-      execute: false,
-      facing: 'N',
-      ghost: false,
-      position: '0-0',
-      startPosition: '00N',
-      endPosition: '',
-      path: { '0-0': 'N' },
-      error: null,
-      start: null,
-      end: null
+      ...cleared_state
     })
   }
 
-  // cria um objeto com os comandos
-  const state_json = JSON.stringify(
-    [
-      {
-        backlog: {
-          rovers: [
-            {
-              'rover-01': {
-                ...state
-              },
-              'rovers-02': {
-                ...state2
-              }
-            }
-          ]
-        }
+  // envia o state do rover 1 para o backlogs
+  const backlog_rover1 = async () => {
+    if (state.commands.length == 0) {
+      return
+    } else {
+      const rover01 = {
+        rover: 'rovers-01',
+        ...state
       }
-    ],
-    null,
-    2
-  )
+      const req_rover1 = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL + '/backlogs',
+        rover01
+      )
+    }
+  }
+
+  // envia o state do rover 2 para o backlogs
+  const backlog_rover2 = async () => {
+    if (state2.commands.length == 0) {
+      return
+    } else {
+      const rover02 = {
+        rover: 'rovers-02',
+        ...state2
+      }
+      const req_rover2 = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL + '/backlogs',
+        rover02
+      )
+    }
+  }
 
   return (
     <>
@@ -125,23 +125,37 @@ export default function HomePage() {
         <Title weight={700} align="center">
           Mars Rover
         </Title>
-        <Text align="center" mb={16} color={'gray'}>
+        <Text align="center" color={'gray'}>
           Já imaginou como seria controlar um{' '}
           <a href="https://pt.wikipedia.org/wiki/Astrom%C3%B3vel_marciano">
             rover
           </a>{' '}
           em um platô de Marte?
         </Text>
-
-        {/* Input para visualizar o backlog */}
-        <JsonInput
-          placeholder="Textarea will autosize to fit the content"
-          value={state_json}
-          variant="filled"
-          radius={12}
-          size="md"
-          minRows={4}
-        />
+        <a
+          href="https://data-provider.tk/rovers"
+          target={'_blank'}
+          style={{ textDecoration: 'none', color: 'inherit' }}
+          rel="noreferrer"
+        >
+          <Button
+            mt={16}
+            mb={16}
+            variant={'light'}
+            radius={12}
+            fullWidth
+            leftIcon={
+              <Image
+                src="/svg/external-link.svg"
+                alt="Left icon"
+                width={15}
+                height={15}
+              />
+            }
+          >
+            Ver a API do Backlog
+          </Button>
+        </a>
 
         {/* Slider para escolher o tamanho do grid */}
         <Slider
@@ -194,7 +208,7 @@ export default function HomePage() {
           <Button
             radius={12}
             onClick={(e) => {
-              interact_rover('L')
+              interact_rover('L'), backlog_rover1()
             }}
             leftIcon={
               <Image
@@ -210,7 +224,7 @@ export default function HomePage() {
 
           <Button
             onClick={(e) => {
-              interact_rover('M')
+              interact_rover('M'), backlog_rover1()
             }}
             radius={12}
             leftIcon={
@@ -227,7 +241,7 @@ export default function HomePage() {
 
           <Button
             onClick={(e) => {
-              interact_rover('R')
+              interact_rover('R'), backlog_rover1()
             }}
             radius={12}
             leftIcon={
@@ -271,7 +285,7 @@ export default function HomePage() {
             radius={12}
             disabled={state.endPosition == ''}
             onClick={(e) => {
-              interact_rover2('L')
+              interact_rover2('L'), backlog_rover2()
             }}
             leftIcon={
               <Image
@@ -287,7 +301,7 @@ export default function HomePage() {
 
           <Button
             onClick={(e) => {
-              interact_rover2('M')
+              interact_rover2('M'), backlog_rover2()
             }}
             disabled={state.endPosition == ''}
             radius={12}
@@ -305,7 +319,7 @@ export default function HomePage() {
 
           <Button
             onClick={(e) => {
-              interact_rover2('R')
+              interact_rover2('R'), backlog_rover2()
             }}
             disabled={state.endPosition == ''}
             radius={12}
